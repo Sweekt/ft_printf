@@ -6,7 +6,7 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:03:15 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/22 15:42:04 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/22 16:09:02 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ int	ft_checkarg(const char c, va_list arg)
 	else if (c == 'p')
 	{
 		lenght = ft_putstr("0x");
+		if (lenght == -1)
+			return (lenght);
 		ft_putnbr_ul((size_t)va_arg(arg, size_t), "0123456789abcdef", &lenght);
 	}
-	else if (c == 'd')
-		ft_putnbr_base(va_arg(arg, int), "0123456789", &lenght);
-	else if (c == 'i')
+	else if (c == 'd' || c == 'i')
 		ft_putnbr_base(va_arg(arg, int), "0123456789", &lenght);
 	else if (c == 'u')
 		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789", &lenght);
