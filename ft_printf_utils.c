@@ -6,7 +6,7 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:18:35 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/22 15:23:00 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/22 16:00:43 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,41 +30,62 @@ ssize_t	ft_putchar(int c)
 ssize_t	ft_putstr(char *str)
 {
 	ssize_t	i;
+	ssize_t	j;
 
 	i = 0;
 	if (!str)
 		return (ft_putstr("(null)"));
 	while (str[i])
-		i += ft_putchar(str[i]);
+	{
+		j = ft_putchar(str[i]);
+		if (j == -1)
+			return (-1);
+		i += j;
+	}
 	return (i);
 }
 
 void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *lenght)
 {
+	ssize_t	i;
+
 	if (nbr < 0)
 	{
-		*lenght += ft_putchar('-');
+		i = ft_putchar('-');
+		if (i == -1)
+			return (*lenght = -1, (void)0);
+		*lenght += i;
 		ft_putnbr_base(nbr * -1, str, lenght);
+		if (*lenght == -1)
+			return (*lenght = -1, (void)0);
 	}
 	else
 	{
 		if (nbr >= (ssize_t)ft_strlen(str))
 		{
 			ft_putnbr_base(nbr / ft_strlen(str), str, lenght);
-			ft_putnbr_base(nbr % ft_strlen(str), str, lenght);
+			if (*lenght == -1)
+				return (*lenght = -1, (void)0);
 		}
-		else
-			*lenght += ft_putchar(str[nbr]);
+		i = ft_putchar(str[nbr % ft_strlen(str)]);
+		if (i == -1)
+			return (*lenght = -1, (void)0);
+		*lenght += i;
 	}
 }
 
 void	ft_putnbr_ul(size_t nbr, char *str, ssize_t *lenght)
 {
+	ssize_t	i;
+
 	if (nbr >= ft_strlen(str))
 	{
 		ft_putnbr_ul(nbr / ft_strlen(str), str, lenght);
-		ft_putnbr_ul(nbr % ft_strlen(str), str, lenght);
+		if (*lenght == -1)
+			return (*lenght = -1, (void)0);
 	}
-	else
-		*lenght += ft_putchar(str[nbr]);
+	i = ft_putchar(str[nbr % ft_strlen(str)]);
+	if (i == -1)
+		return (*lenght = -1, (void)0);
+	*lenght += i;
 }
