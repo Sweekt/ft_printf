@@ -6,35 +6,65 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:18:35 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/20 19:49:12 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/22 15:23:00 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 
-void	ft_putchar(const char c)
+size_t	ft_strlen(char *str)
 {
-	write(1, &c, 1);
+	ssize_t	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
 }
 
-void	ft_checkarg(const char c, va_list arg)
+ssize_t	ft_putchar(int c)
 {
-	if (c == 'c')
-		ft_putchar(arg);
-	else if (c == 's')
-		ft_putstr(arg);
-	else if (c == 'p')
-		??;
-	else if (c == 'd')
-		??;
-	else if (c == 'i')
-		ft_putnbr(arg);
-	else if (c == 'u')
-		??;
-	else if (c == 'x')
-		ft_putnbr_hex(arg, 1);
-	else if (c == 'X')
-		ft_putnbr_hex(arg, 2);
-	else if (c == '%')
-		ft_putchar('%');
+	return (write(1, &c, 1));
+}
+
+ssize_t	ft_putstr(char *str)
+{
+	ssize_t	i;
+
+	i = 0;
+	if (!str)
+		return (ft_putstr("(null)"));
+	while (str[i])
+		i += ft_putchar(str[i]);
+	return (i);
+}
+
+void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *lenght)
+{
+	if (nbr < 0)
+	{
+		*lenght += ft_putchar('-');
+		ft_putnbr_base(nbr * -1, str, lenght);
+	}
+	else
+	{
+		if (nbr >= (ssize_t)ft_strlen(str))
+		{
+			ft_putnbr_base(nbr / ft_strlen(str), str, lenght);
+			ft_putnbr_base(nbr % ft_strlen(str), str, lenght);
+		}
+		else
+			*lenght += ft_putchar(str[nbr]);
+	}
+}
+
+void	ft_putnbr_ul(size_t nbr, char *str, ssize_t *lenght)
+{
+	if (nbr >= ft_strlen(str))
+	{
+		ft_putnbr_ul(nbr / ft_strlen(str), str, lenght);
+		ft_putnbr_ul(nbr % ft_strlen(str), str, lenght);
+	}
+	else
+		*lenght += ft_putchar(str[nbr]);
 }
