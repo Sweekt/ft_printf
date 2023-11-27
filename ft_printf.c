@@ -6,11 +6,24 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:03:15 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/22 16:09:02 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/27 16:37:38 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+void	ft_printmemory(size_t arg, ssize_t *lenght)
+{
+	if ((char *)arg == NULL)
+	{
+		*lenght = ft_putstr("(nil)");
+		return ;
+	}
+	*lenght = ft_putstr("0x");
+	if (*lenght == -1)
+		return ;
+	ft_putnbr_ul(arg, "0123456789abcdef", lenght);
+}
 
 int	ft_checkarg(const char c, va_list arg)
 {
@@ -22,12 +35,7 @@ int	ft_checkarg(const char c, va_list arg)
 	else if (c == 's')
 		lenght = ft_putstr(va_arg(arg, char *));
 	else if (c == 'p')
-	{
-		lenght = ft_putstr("0x");
-		if (lenght == -1)
-			return (lenght);
-		ft_putnbr_ul((size_t)va_arg(arg, size_t), "0123456789abcdef", &lenght);
-	}
+		ft_printmemory((size_t)va_arg(arg, size_t), &lenght);
 	else if (c == 'd' || c == 'i')
 		ft_putnbr_base(va_arg(arg, int), "0123456789", &lenght);
 	else if (c == 'u')
@@ -55,10 +63,7 @@ int	ft_printf(const char *str, ...)
 		if (str[i] != '%')
 			lenght += ft_putchar(str[i]);
 		else if (str[i + 1] != 0)
-		{
-			lenght += ft_checkarg(str[i + 1], args);
-			i++;
-		}
+			lenght += ft_checkarg(str[i++ + 1], args);
 		else
 			lenght = -1;
 		if (lenght == -1)
