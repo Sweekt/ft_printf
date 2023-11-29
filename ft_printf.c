@@ -6,7 +6,7 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:03:15 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/29 15:09:58 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/29 15:10:29 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ int	ft_printf(const char *str, ...)
 		if (str[i] != '%')
 		{
 			if (ft_putchar(str[i]) == -1)
-				break ;
+				return (va_end(args), -1);
 			length++;
 		}
 		else
-			ft_checkarg(str[i++ + 1], args, &length);
+			ft_checkarg(str[++i], args, &length);
 		if (length == -1)
 			break ;
 		i++;
