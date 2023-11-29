@@ -6,7 +6,7 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:03:15 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/29 11:35:58 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/29 15:09:58 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ void	ft_checkarg(const char c, va_list arg, ssize_t *length)
 		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789ABCDEF", &tmp);
 	else if (c == '%')
 		tmp += ft_putchar('%');
+	else if (c == 0)
+		tmp = -1;
 	if (tmp == -1)
 		*length = tmp;
 	else
@@ -66,15 +68,16 @@ int	ft_printf(const char *str, ...)
 	while (str[i])
 	{
 		if (str[i] != '%')
-			length += ft_putchar(str[i]);
-		else if (str[i + 1] != 0)
-			ft_checkarg(str[i++ + 1], args, &length);
+		{
+			if (ft_putchar(str[i]) == -1)
+				break ;
+			length++;
+		}
 		else
-			length = -1;
+			ft_checkarg(str[i++ + 1], args, &length);
 		if (length == -1)
 			break ;
 		i++;
 	}
-	va_end(args);
-	return (length);
+	return (va_end(args), length);
 }
