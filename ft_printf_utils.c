@@ -45,7 +45,7 @@ ssize_t	ft_putstr(char *str)
 	return (i);
 }
 
-void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *lenght)
+void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *length)
 {
 	ssize_t	i;
 
@@ -53,39 +53,39 @@ void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *lenght)
 	{
 		i = ft_putchar('-');
 		if (i == -1)
-			return (*lenght = -1, (void)0);
-		*lenght += i;
-		ft_putnbr_base(nbr * -1, str, lenght);
-		if (*lenght == -1)
-			return (*lenght = -1, (void)0);
+			return (*length = -1, (void)0);
+		*length += i;
+		ft_putnbr_base(nbr * -1, str, length);
+		if (*length == -1)
+			return (*length = -1, (void)0);
 	}
 	else
 	{
 		if (nbr >= (ssize_t)ft_strlen(str))
 		{
-			ft_putnbr_base(nbr / ft_strlen(str), str, lenght);
-			if (*lenght == -1)
-				return (*lenght = -1, (void)0);
+			ft_putnbr_base(nbr / ft_strlen(str), str, length);
+			if (*length == -1)
+				return (*length = -1, (void)0);
 		}
 		i = ft_putchar(str[nbr % ft_strlen(str)]);
 		if (i == -1)
-			return (*lenght = -1, (void)0);
-		*lenght += i;
+			return (*length = -1, (void)0);
+		*length += i;
 	}
 }
 
-void	ft_putnbr_ul(size_t nbr, char *str, ssize_t *lenght)
+void	ft_putnbr_ul(size_t nbr, char *str, ssize_t *length)
 {
 	ssize_t	i;
 
 	if (nbr >= ft_strlen(str))
 	{
-		ft_putnbr_ul(nbr / ft_strlen(str), str, lenght);
-		if (*lenght == -1)
-			return (*lenght = -1, (void)0);
+		ft_putnbr_ul(nbr / ft_strlen(str), str, length);
+		if (*length == -1)
+			return (*length = -1, (void)0);
 	}
 	i = ft_putchar(str[nbr % ft_strlen(str)]);
 	if (i == -1)
-		return (*lenght = -1, (void)0);
-	*lenght += i;
+		return (*length = -1, (void)0);
+	*length += i;
 }

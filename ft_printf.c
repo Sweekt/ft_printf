@@ -6,69 +6,75 @@
 /*   By: beroy <beroy@student.42lyon.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 19:03:15 by beroy             #+#    #+#             */
-/*   Updated: 2023/11/27 16:37:38 by beroy            ###   ########.fr       */
+/*   Updated: 2023/11/29 11:35:58 by beroy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_printmemory(size_t arg, ssize_t *lenght)
+void	ft_printmemory(size_t arg, ssize_t *length)
 {
 	if ((char *)arg == NULL)
 	{
-		*lenght = ft_putstr("(nil)");
+		*length = ft_putstr("(nil)");
 		return ;
 	}
-	*lenght = ft_putstr("0x");
-	if (*lenght == -1)
+	*length = ft_putstr("0x");
+	if (*length == -1)
 		return ;
-	ft_putnbr_ul(arg, "0123456789abcdef", lenght);
+	ft_putnbr_ul(arg, "0123456789abcdef", length);
 }
 
-int	ft_checkarg(const char c, va_list arg)
+void	ft_checkarg(const char c, va_list arg, ssize_t *length)
 {
-	ssize_t	lenght;
+	ssize_t	tmp;
 
-	lenght = 0;
+	tmp = 0;
 	if (c == 'c')
-		lenght = ft_putchar((unsigned char)va_arg(arg, int));
+		tmp = ft_putchar((unsigned char)va_arg(arg, int));
 	else if (c == 's')
-		lenght = ft_putstr(va_arg(arg, char *));
+		tmp = ft_putstr(va_arg(arg, char *));
 	else if (c == 'p')
-		ft_printmemory((size_t)va_arg(arg, size_t), &lenght);
+		ft_printmemory((size_t)va_arg(arg, size_t), &tmp);
 	else if (c == 'd' || c == 'i')
-		ft_putnbr_base(va_arg(arg, int), "0123456789", &lenght);
+		ft_putnbr_base(va_arg(arg, int), "0123456789", &tmp);
 	else if (c == 'u')
-		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789", &lenght);
+		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789", &tmp);
 	else if (c == 'x')
-		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789abcdef", &lenght);
+		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789abcdef", &tmp);
 	else if (c == 'X')
-		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789ABCDEF", &lenght);
+		ft_putnbr_base(va_arg(arg, unsigned int), "0123456789ABCDEF", &tmp);
 	else if (c == '%')
-		lenght += ft_putchar('%');
-	return (lenght);
+		tmp += ft_putchar('%');
+	if (tmp == -1)
+		*length = tmp;
+	else
+		*length += tmp;
 }
 
 int	ft_printf(const char *str, ...)
 {
 	size_t	i;
 	va_list	args;
-	ssize_t	lenght;
+	ssize_t	length;
 
+	if (!str)
+		return (-1);
 	i = 0;
-	lenght = 0;
+	length = 0;
 	va_start(args, str);
 	while (str[i])
 	{
 		if (str[i] != '%')
-			lenght += ft_putchar(str[i]);
+			length += ft_putchar(str[i]);
 		else if (str[i + 1] != 0)
-			lenght += ft_checkarg(str[i++ + 1], args);
+			ft_checkarg(str[i++ + 1], args, &length);
 		else
-			lenght = -1;
-		if (lenght == -1)
+			length = -1;
+		if (length == -1)
 			break ;
 		i++;
 	}
-	return (lenght);
+	va_end(args);
+	return (length);
 }

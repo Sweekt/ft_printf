@@ -20,7 +20,7 @@
 int		ft_printf(const char *str, ...);
 ssize_t	ft_putchar(int c);
 ssize_t	ft_putstr(char *str);
-void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *lenght);
-void	ft_putnbr_ul(size_t nbr, char *str, ssize_t *lenght);
+void	ft_putnbr_base(ssize_t nbr, char *str, ssize_t *length);
+void	ft_putnbr_ul(size_t nbr, char *str, ssize_t *length);
 
 #endif
